@@ -1,4 +1,4 @@
-# 🏗️ EdgeCrop — System Architecture & System Robustness
+# 🏗️System Architecture & System Robustness
 
 > **EdgeCrop** is an edge-AI agricultural inspection rover designed to collect plant and environmental data in the field, identify the inspected plot, run a **custom-trained plant-health computer vision model locally on a smartphone**, and return a structured inspection result without depending on continuous cloud inference.
 
