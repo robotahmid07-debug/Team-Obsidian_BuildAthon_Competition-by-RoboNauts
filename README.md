@@ -3,13 +3,13 @@ Team Obsidian · BuildAthon 2026 (RoboNauts) · Track C: Agritech
 Train centrally. Deploy locally. Collect physically. Keep the robot controller independent from the AI inference pipeline.
 
 📁 Repository File Map — Which File Is For What
-Start here. This table tells you exactly what each file/folder in this repository does.
+Start here. This table tells you exactly what each file/folder does.
 
 Path	File / Folder	What It Is	Why It Matters
 /README.md	This file	Master documentation, feature overview, rubric alignment, judge navigation	Single entry point for evaluation
 /System Architecture & System Robustness/	EdgeCrop_System_Architecture_Upgraded (5).md	Full architecture specification, robustness strategy, state machine, failure modes	Deep technical reference
 /Trained Edge model/	Model artifacts (.tflite, etc.)	Exported/optimized model ready for smartphone deployment	Deployment artifact
-/codes/	Aurdino Lowlevel hardware code.cpp	ESP32-S3 firmware: motor control, servo positioning, RFID reading, sensor polling, LCD updates, communication	Hardware control logic
+/codes/	Aurdino Lowlevel hardware code.cpp	ESP32-S3 firmware: motor control, servo positioning, RFID reading, sensor polling, LCD updates, transmission, communication	Hardware control logic
 /LICENSE	License file	Open-source license terms	Legal compliance
 (Recommended) /ai/	dataset/, preprocessing/, phase1_training/, phase2_finetuning/, evaluation/, export/	AI development pipeline	Training data & notebooks
 (Recommended) /mobile/	inference/, dashboard/, inspection_records/, communication/	Smartphone app: local inference, dashboard, record storage	Edge intelligence layer
@@ -28,7 +28,7 @@ LCD Manager — Local status display (fallback)
 
 Communication — Edge communication with smartphone
 
-Transmission Module — Multi-rover coordination & future scalability (see §2.3)
+Transmission Module — Robot-to-robot coordination & multi-rover scalability (see §2)
 
 1. Features, Uniqueness, Novelty & Innovation
 1.1 ✨ Core Features
@@ -40,7 +40,7 @@ Transmission Module — Multi-rover coordination & future scalability (see §2.3
 5	RFID Plot Identification	Every observation is tagged with a physical plot ID (e.g., A-03) — no manual bookkeeping
 6	Environmental/VOC Sensing	Adds contextual field data (VOC levels) alongside visual inspection
 7	Local LCD Fallback	Basic machine status stays visible even if the dashboard is unreachable
-8	Transmission-Based Multi-Rover Scalability ⭐	Robot-to-robot transmission layer designed from day one for future multi-rover fleets (see §2.3)
+8	Transmission-Based Multi-Rover Scalability ⭐	Robot-to-robot transmission layer designed from day one for future multi-rover fleets (see §2)
 9	Robustness by Separation	AI, edge inference, and robot control are decoupled — one failure does not cascade
 10	Measured, Not Estimated	All performance numbers (training time, accuracy, inference latency, model size) reported from actual runs
 1.2 🎯 What Makes EdgeCrop Unique
@@ -57,9 +57,9 @@ Scalability-first robotics — The transmission layer is not an afterthought; it
 1.3 💡 Novelty & Innovation
 Smartphone as a reusable edge AI node — Instead of building dedicated inference hardware, EdgeCrop turns an everyday smartphone into a field AI compute device.
 
-Staged fine-tuning for agricultural domain adaptation — Phase 1 establishes a stable baseline; Phase 2 refines the representation. This is documented as an explicit experimental procedure.
+Staged fine-tuning for agricultural domain adaptation — Phase 1 establishes a stable baseline; Phase 2 refines the representation. Documented as an explicit experimental procedure.
 
-Transmission-mediated multi-rover architecture — The system is designed from the ground up to scale from one rover to a coordinated fleet (see §2.3).
+Transmission-mediated multi-rover architecture — Designed from the ground up to scale from one rover to a coordinated fleet (see §2).
 
 Robustness-first system design — Failure modes are treated as design constraints, not bugs to patch later.
 
@@ -113,11 +113,11 @@ Feasibility & Implementation (25%)	Already implemented at the single-rover level
 Innovation & Originality (15%)	Most student rover projects stop at one unit; this one is designed for fleets
 3. BuildAthon Rubric Scorecard
 Rubric Criteria	Weight	How EdgeCrop Delivers	Section
-Technical Complexity & Scalability	30%	Three-layer architecture; two-phase training; transmission-based multi-rover scalability	§2, §5, §7
-Feasibility & Implementation	25%	Measured results (931 s training, 20.58% → 30.79% accuracy, 135 ms inference); edge-deployed TFLite (2 MB)	§4, §6
-Sustainability Integration	20%	Targeted inspection reduces blanket chemical use; local inference eliminates cloud dependency; smartphone reused as edge computer	§8
+Technical Complexity & Scalability	30%	Three-layer architecture; two-phase training; transmission-based multi-rover scalability	§2, §5, §8
+Feasibility & Implementation	25%	Measured results (931 s training, 20.58% → 30.79% accuracy, 135 ms inference); edge-deployed TFLite (2 MB)	§6
+Sustainability Integration	20%	Targeted inspection reduces blanket chemical use; local inference eliminates cloud dependency; smartphone reused as edge computer	§9
 Innovation & Originality	15%	Cloud-trained → edge-deployed; RFID plot-aware inspection; transmission-based fleet scaling	§1, §2
-UX/UI & Presentation	10%	LCD fallback display; dashboard inspection records; Mermaid diagrams; 3-minute demo	§10, §12
+UX/UI & Presentation	10%	LCD fallback display; dashboard inspection records; Mermaid diagrams; 3-minute demo	§8, §12
 4. What EdgeCrop Is (Quick Summary)
 EdgeCrop combines a mobile inspection rover, ESP32-S3 IoT control, RFID plot identification, environmental sensing, and a custom-trained computer vision model deployed directly on a smartphone.
 
@@ -146,6 +146,12 @@ Inspection record is stored for later review
 
 5. System Architecture (Deep Dive)
 EdgeCrop is intentionally divided into three major layers to prevent tight coupling between AI, edge inference, and robot control.
+
+AI Development Layer — dataset preparation, training, evaluation, optimization
+
+Edge Intelligence Layer — smartphone-based local AI inference and dashboard
+
+Robotic Data-Collection Layer — ESP32-S3 control, RFID plot identification, environmental sensing, movement, transmission, local display
 
 5.1 High-Level Architecture
 
@@ -186,24 +192,65 @@ Local operation is prioritized — No cloud API required for every image.
 
 Transmission layer is first-class — Multi-rover scaling is built in, not bolted on.
 
+5.3 Clear Responsibility Separation
+Component	Main Responsibility	Why It Is Separated
+Agricultural Dataset	Provides training examples	Keeps training data separate from deployment
+Google Colab	Model development and training	Training is computationally heavier
+Phase 1	Initial model training	Establishes the first trained model
+Phase 2	Fine-tuning for 15 epochs	Refines the trained model
+Optimized Model	Deployment artifact	Designed for edge inference
+Smartphone	AI inference + dashboard	Provides practical edge computing
+ESP32-S3	Robot control	Keeps movement deterministic
+RFID	Plot identification	Associates observations with a physical plot
+Environmental/VOC Sensor	Supporting field information	Adds contextual sensor data
+LCD	Local status	Provides a fallback display
+Motors	Rover movement	Moves the inspection platform
+Servo	Camera positioning	Controls inspection viewpoint
+Transmission Layer	Rover ↔ rover / rover ↔ base	Enables multi-rover scalability
 6. Custom AI Training Pipeline & Measured Results
 6.1 Two-Phase Training
 Phase 1 — Initial Training (5–8 Epochs)
 
-text
-Agricultural Dataset → Dataset Preparation → Model Init
-        → ┌─────────────────────────┐
-          │ PHASE 1 · 5–8 Epochs    │
-          └─────────────────────────┘
-        → Validation
-Phase 2 — Fine-Tuning (15 Epochs)
+Establishes the model's initial ability to distinguish target agricultural classes.
 
 text
-Phase 1 Model → Validation Results
-        → ┌─────────────────────────┐
-          │ PHASE 2 · 15 Epochs     │
-          └─────────────────────────┘
-        → Final Validation → Optimized Edge Model
+Agricultural Dataset
+        │
+        ▼
+Dataset Preparation
+        │
+        ▼
+Model Initialization
+        │
+        ▼
+┌─────────────────────────────┐
+│ PHASE 1 · Initial Training  │
+│ 5–8 Epochs                  │
+└─────────────────────────────┘
+        │
+        ▼
+Validation
+Phase 2 — Fine-Tuning (15 Epochs)
+
+Refines the model's learned representation and improves performance on selected agricultural classes.
+
+text
+Phase 1 Model
+      │
+      ▼
+Validation Results
+      │
+      ▼
+┌─────────────────────────────┐
+│ PHASE 2 · Fine-Tuning       │
+│ 15 Epochs                   │
+└─────────────────────────────┘
+      │
+      ▼
+Final Validation
+      │
+      ▼
+Optimized Edge Model
 6.2 Training Pipeline (End-to-End)
 
 
@@ -230,6 +277,8 @@ Communication latency	25 ms
 Precision	0.21
 Recall	0.21
 F1-score	0.21
+Important: Precision, recall, F1-score, loss curves, and confusion matrix are reported from the actual training run. They are not estimated or inferred from accuracy.
+
 6.4 Model Architecture & Hyperparameters
 Parameter	Value
 Dataset	Processed Agricultural/Plant Pathology Dataset (~10,000+ images)
@@ -305,6 +354,16 @@ Fleet efficiency (future)	Multi-rover coordination scales coverage without scali
 Actual water, chemical, carbon, or labor savings will be reported only after measurement.
 
 10. Low-Connectivity / Edge-First Operation
+During Development
+text
+Internet / Colab
+       │
+       ▼
+Training + Evaluation
+       │
+       ▼
+Export Model
+During Field Operation
 text
                  INTERNET
                     │
@@ -314,7 +373,7 @@ text
                     X
 
  Field → Image → Smartphone → Local AI → Result
-The model is trained before deployment. The smartphone then acts as the edge inference device.
+The model is trained before deployment. The smartphone then acts as the edge inference device. This is particularly relevant for agricultural environments where reliable high-speed connectivity cannot always be assumed.
 
 Communication protocols:
 
