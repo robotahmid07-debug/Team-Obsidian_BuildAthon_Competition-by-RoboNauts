@@ -115,7 +115,7 @@ The ESP32-S3 **does not** run computer vision. The smartphone **does not** drive
 
 ---
 
-##  Summary — The Uniqueness Stack
+##  Summary
 
 | # | Unique Element | Rubric Criterion It Serves |
 |---|---|---|
