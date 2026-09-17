@@ -1,66 +1,465 @@
 # Team-Obsidian_BuildAthon_Competition-by-RoboNauts
 https://colab.research.google.com/drive/1R-qn433yajfv_r_-DDeRw32P4jHemGH7?usp=sharing
-<!-- HEADER BANNER -->
-<div align="center">
-  <img src="docs/banner.png" alt="Project Banner" width="100%" />
-  
-  # 🚀 AgriBot ESP32-S3 & Edge AI Vision Pipeline
+# 🌱 EdgeCrop — Edge AI Agricultural Plant Health Monitoring
 
-  <p align="center">
-    <b>An end-to-end embedded pipeline combining ESP32-S3 hardware control, I2C/RFID sensor integration, and real-time TensorFlow Lite Edge AI inference.</b>
-  </p>
-
-  <!-- BADGES -->
-  <a href="https://github.com/your-username/your-repo/stargazers"><img src="https://img.shields.io/github/stars/your-username/your-repo?style=for-the-badge&color=00C853" alt="Stars"></a>
-  <a href="https://github.com/your-username/your-repo/network/members"><img src="https://img.shields.io/github/forks/your-username/your-repo?style=for-the-badge&color=0288D1" alt="Forks"></a>
-  <a href="https://github.com/your-username/your-repo/issues"><img src="https://img.shields.io/github/issues/your-username/your-repo?style=for-the-badge&color=FF6D00" alt="Issues"></a>
-  <a href="https://github.com/your-username/your-repo/blob/main/LICENSE"><img src="https://img.shields.io/github/license/your-username/your-repo?style=for-the-badge&color=D500F9" alt="License"></a>
-</div>
+> **An edge-based agricultural inspection system that uses computer vision, environmental sensing, and a mobile device to identify plants that may require further inspection.**
 
 ---
 
 ## 📌 Overview
 
-This repository houses the firmware and edge intelligence pipeline for the **AgriBot** platform. The system integrates hardware execution on the ESP32-S3 MCU with offloaded or local neural network classification models to handle real-time tag identification, sensor telemetry, and disease detection.
+Farmers and agricultural workers often need to inspect a large number of plants manually. This can take a lot of time, and problems may not always be noticed early.
 
-<div align="center">
-  <img src="docs/architecture_diagram.png" alt="System Architecture" width="85%" />
-  <br>
-  <sub><i>Figure 1: Hardware control loop and Edge AI decision pipeline.</i></sub>
-</div>
+**EdgeCrop** is a small agricultural inspection rover designed to make this process easier.
 
----
+The rover moves through a farm or a small test field, identifies the current plot using RFID, collects environmental readings, and captures images of plants. A trained computer-vision model runs directly on a smartphone, which acts as the system's **edge AI device**.
 
-## ✨ Key Features
+The result is shown both on the phone dashboard and on an I²C LCD mounted on the rover.
 
-* **Dual-Protocol Hardware Interface:** Configured for I2C communication (`GPIO 8` / `GPIO 9`) with PN532 RFID modules and motor controllers.
-* **On-Device Inference Pipeline:** Accepts JSON inference payloads containing class predictions and confidence scores over local Wi-Fi SoftAP or Serial.
-* **Fault-Tolerant Bus Control:** Low-frequency I2C clock adjustments and explicit reset pin toggling to prevent bus lockups under inductive load spikes.
-* **Non-Blocking Execution Loop:** Event-driven target activation ensuring sub-100ms response times without stalling core system tasks.
-
----
-
-## 🛠 Tech Stack & Hardware Components
-
-| Category | Component / Tool | Details |
-| :--- | :--- | :--- |
-| **Microcontroller** | ESP32-S3 | Xtensa® 32-bit LX7 Dual-Core, 240 MHz |
-| **Peripherals** | PN532 NFC/RFID Kit | I2C Mode (`0x24` / `0x28`), Custom Pin Mapping |
-| **Edge AI Framework** | TensorFlow Lite / MobileNet | Quantized `.tflite` model deployed on mobile/edge host |
-| **Communication** | Wi-Fi HTTP SoftAP / USB Serial | RESTful JSON payload ingestion |
-| **Development** | Arduino IDE / C++ / Wire.h | Custom firmware architecture |
-
----
-
-## 🏗 Pipeline Architecture
+The system is designed around a simple idea:
 
 ```text
-  ┌─────────────────┐       I2C (GPIO 8/9)       ┌──────────────────┐
-  │ PN532 RFID /    │ ─────────────────────────> │                  │
-  │ Sensors         │                            │                  │
-  └─────────────────┘                            │   ESP32-S3      │
-                                                 │   Core Engine    │ ───> Actuators / Motors
-  ┌─────────────────┐    HTTP POST / Serial      │                  │
-  │ Mobile Device / │ ─────────────────────────> │                  │
-  │ Edge AI Model   │     (JSON Payload)         └──────────────────┘
-  └─────────────────┘
+SCAN → ANALYZE → IDENTIFY → RECORD → ALERT
+```
+
+---
+
+# 🎯 What EdgeCrop Does
+
+The system can:
+
+* 🚗 Move between inspection points
+* 🏷️ Identify plots using RFID
+* 📷 Capture plant/leaf images
+* 🤖 Run plant-health analysis using a trained AI model
+* 📱 Perform AI inference locally on a smartphone
+* 🌡️ Collect supporting environmental/VOC readings
+* 📺 Display important results on an onboard LCD
+* 📊 Show detailed information through a mobile dashboard
+* 📝 Keep inspection records for different plots
+
+---
+
+# 💡 Why Edge AI?
+
+A major part of EdgeCrop is that the AI model is **not dependent on a cloud server for every prediction**.
+
+The model is trained during development using a suitable agricultural dataset and cloud computing resources such as Google Colab.
+
+After training, the model is prepared for deployment on the smartphone.
+
+### Training
+
+```text
+Agricultural Dataset
+        ↓
+Data Preparation
+        ↓
+Model Training
+        ↓
+Validation & Testing
+        ↓
+Model Optimization
+        ↓
+Deployable Model
+```
+
+### Real-World Inference
+
+```text
+Plant / Leaf
+     ↓
+Camera
+     ↓
+Smartphone
+     ↓
+Local AI Inference
+     ↓
+Prediction
+     ↓
+Dashboard + LCD
+```
+
+This reduces the need to continuously upload images to a remote server and makes the system more suitable for environments where internet connectivity may be limited.
+
+---
+
+# 🧠 AI System
+
+The AI component is responsible for analyzing images captured during plant inspection.
+
+The development workflow includes:
+
+1. Selecting an appropriate agricultural image dataset
+2. Preparing and cleaning the data
+3. Training or fine-tuning a computer-vision model
+4. Testing the model on unseen images
+5. Measuring model performance
+6. Optimizing the model for edge inference
+7. Deploying the resulting model on the smartphone
+
+The AI output is treated as an **early-warning/decision-support result**, not as a confirmed agricultural diagnosis.
+
+For example:
+
+```text
+Plant: Tomato
+
+AI Result:
+Possible Disease
+
+Confidence:
+91.4%
+
+Recommendation:
+Further inspection recommended.
+```
+
+---
+
+# 📱 Edge Device
+
+A smartphone is used as the edge-computing device.
+
+The phone handles:
+
+* Image processing
+* AI inference
+* Inspection results
+* Dashboard
+* Inspection history
+* Communication with the rover
+
+Using a smartphone allows the project to demonstrate that useful AI inference can be performed on a relatively low-cost, commonly available device rather than requiring a dedicated GPU computer at every inspection point.
+
+The architecture is also designed so that the edge device can be replaced by another suitable device in the future.
+
+---
+
+# 🤖 Robot Architecture
+
+The robot is controlled by an **ESP32-S3**.
+
+The ESP32-S3 is responsible for the physical part of the system:
+
+```text
+                  ┌──────────────────┐
+                  │   Smartphone     │
+                  │   Edge AI + UI   │
+                  └────────┬─────────┘
+                           │
+                    Communication
+                           │
+                           ▼
+                  ┌──────────────────┐
+                  │     ESP32-S3     │
+                  │  Main Controller │
+                  └───────┬──────────┘
+                          │
+       ┌──────────────────┼──────────────────┐
+       │                  │                  │
+       ▼                  ▼                  ▼
+   Motor Driver       Sensors             LCD
+       │             ┌────┴────┐            │
+       ▼             │         │            ▼
+    Motors          RFID      MQ Sensor   Status
+```
+
+### ESP32 responsibilities
+
+* Motor control
+* Servo control
+* RFID reading
+* MQ sensor reading
+* LCD control
+* Rover status
+* Communication with the edge device
+
+The ESP32 does **not** need to run the main computer-vision model. This keeps the robot controller lightweight and separates physical control from AI processing.
+
+---
+
+# 🔍 Inspection Process
+
+A typical inspection works like this:
+
+### 1. Move
+
+The rover moves to an inspection point.
+
+### 2. Identify
+
+The RFID reader detects the tag assigned to the plot.
+
+```text
+RFID → PLOT-B02
+```
+
+### 3. Capture
+
+The camera is positioned toward the plant and captures an image.
+
+### 4. Analyze
+
+The image is processed locally by the AI model on the smartphone.
+
+### 5. Combine
+
+The AI result is associated with the plot ID and supporting sensor readings.
+
+### 6. Display
+
+The result appears on both the phone and the onboard LCD.
+
+### 7. Record
+
+The inspection is saved for later review.
+
+---
+
+# 📺 Onboard Display
+
+The I²C LCD provides quick information without requiring the user to open the dashboard.
+
+Example:
+
+```text
+┌────────────────────┐
+│ PLOT: B-02         │
+│ TOMATO             │
+│                    │
+│ STATUS: ATTENTION  │
+│ AI: 91%            │
+│ VOC: 327           │
+└────────────────────┘
+```
+
+The LCD is intended for short status information, while the smartphone provides the detailed analysis.
+
+---
+
+# 📊 Mobile Dashboard
+
+The mobile dashboard provides a more complete view of the inspection.
+
+It can display:
+
+* Current plot
+* Plant information
+* Captured image
+* AI prediction
+* AI confidence
+* Sensor readings
+* Inspection status
+* Previous inspection records
+
+Example:
+
+```text
+PLOT B-02
+───────────────
+
+Tomato
+
+Possible Disease
+Confidence: 91.4%
+
+VOC Reading: 327
+Risk: Moderate
+
+Further inspection
+recommended.
+```
+
+---
+
+# 🧩 Hardware
+
+| Component          | Quantity | Purpose                    |
+| ------------------ | -------: | -------------------------- |
+| ESP32-S3 Dev Board |        1 | Main robot controller      |
+| L298N / TB6612FNG  |        1 | Motor control              |
+| DC Gear Motors     |      2–4 | Rover movement             |
+| Wheels             |      2–4 | Mobility                   |
+| Continuous Servo   |      1–2 | Mechanical actuation       |
+| SG90 / MG90S Servo |        1 | Camera positioning         |
+| MQ-135 / MQ-2      |      1–2 | Supporting gas/VOC reading |
+| USB Webcam         |        1 | Plant/leaf image capture   |
+| I²C LCD            |        1 | Local status display       |
+| RC522 RFID Reader  |        1 | Plot identification        |
+| Battery Pack       |      1–2 | Power supply               |
+
+The exact hardware configuration may vary depending on the final prototype.
+
+---
+
+# 🔌 System Data Flow
+
+```text
+                   AGRICULTURAL FIELD
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │    Plant    │
+                    └──────┬──────┘
+                           │
+                      Camera Image
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │   Smartphone    │
+                  │    Edge AI      │
+                  └────────┬────────┘
+                           │
+                    AI Prediction
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │    ESP32-S3     │
+                  └───────┬─────────┘
+                          │
+          ┌───────────────┼──────────────┐
+          ▼               ▼              ▼
+        RFID          MQ Sensor        Motors
+          │               │              │
+          └───────────────┼──────────────┘
+                          │
+                          ▼
+                    Inspection Data
+                          │
+                 ┌────────┴────────┐
+                 ▼                 ▼
+              LCD             Mobile UI
+```
+
+---
+
+# 🌾 Sustainability & Low-Connectivity Design
+
+EdgeCrop is designed with resource efficiency in mind.
+
+Instead of sending every captured image to a remote server, the trained model can perform inference locally on the edge device.
+
+This can help reduce:
+
+* Continuous internet dependency
+* Data transfer requirements
+* Cloud inference requests
+* Infrastructure requirements at every field location
+
+The system can also store inspection information locally and synchronize data when connectivity becomes available, depending on the final implementation.
+
+---
+
+# 🔮 Future Improvements
+
+The current prototype focuses on proving the core system.
+
+Future versions could include:
+
+* More plant and disease classes
+* Improved model accuracy
+* Offline-first data synchronization
+* Soil-moisture sensing
+* Temperature and humidity sensing
+* Automated irrigation recommendations
+* Larger farm mapping
+* Better autonomous navigation
+* More efficient edge models
+* Multiple rover support
+* Centralized farm analytics
+
+---
+
+# 🛠️ Project Structure
+
+```text
+EdgeCrop/
+│
+├── firmware/
+│   └── esp32/
+│       ├── main.ino
+│       ├── motor_control/
+│       ├── sensors/
+│       ├── rfid/
+│       └── display/
+│
+├── ai/
+│   ├── training/
+│   ├── preprocessing/
+│   ├── evaluation/
+│   └── model/
+│
+├── edge_app/
+│   ├── inference/
+│   ├── dashboard/
+│   └── communication/
+│
+├── docs/
+│   ├── architecture/
+│   ├── hardware/
+│   └── model/
+│
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# 🚀 Quick Start
+
+## 1. Clone the repository
+
+```bash
+git clone <YOUR-REPOSITORY-URL>
+cd EdgeCrop
+```
+
+## 2. Train the model
+
+Open the training notebook in the `ai/training/` directory and follow the documented training steps.
+
+## 3. Prepare the edge model
+
+Export the trained model into the format supported by the edge application.
+
+## 4. Upload ESP32 firmware
+
+Open the firmware project in Arduino IDE and upload it to the ESP32-S3.
+
+## 5. Start the edge application
+
+Connect the smartphone/edge device and start the application.
+
+## 6. Run an inspection
+
+Place an RFID tag at a test plot, move the rover to the plot, capture a plant image, and view the resulting analysis.
+
+---
+
+# 📈 Project Goal
+
+EdgeCrop is built around a simple goal:
+
+> **Make plant inspection more accessible by bringing AI closer to the field.**
+
+Instead of depending completely on a remote cloud service, the system combines a mobile edge device, a lightweight robot controller, sensors, and computer vision into one agricultural inspection workflow.
+
+---
+
+## 👥 Team
+
+**BuildAthon 2026**
+
+Team: **[TEAM NAME]**
+
+Track: **Agritech**
+
+---
+
+## 📄 License
+
+This project is developed for the BuildAthon competition.
+
+Third-party datasets, libraries, models, and other resources used in the project are documented separately in the repository.
+
