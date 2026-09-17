@@ -1,4 +1,4 @@
-# Team-Obsidian_BuildAthon_Competition-by-RoboNauts
+# Team-Obsidian_BuildAthon_Competition-by-RoboNauts Track C(Agritech)
 https://colab.research.google.com/drive/1R-qn433yajfv_r_-DDeRw32P4jHemGH7?usp=sharing
 # 🌱 EdgeCrop — Edge AI Agricultural Plant Health Monitoring
 
