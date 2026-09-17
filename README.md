@@ -1,4 +1,4 @@
-# 🌱 EdgeCrop — Edge-AI Agricultural Inspection Rover
+# 🌱 Edge-AI Agricultural Inspection Rover
 
 ### Team Obsidian · BuildAthon 2026 (RoboNauts) · Track C: Agritech
 
