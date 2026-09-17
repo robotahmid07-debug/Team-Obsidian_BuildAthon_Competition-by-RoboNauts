@@ -581,29 +581,31 @@ The project repository should explicitly document external resources used during
 For every external dataset, pretrained base model, library, framework, or significant AI-assisted development contribution, record:
 
 ```text
-Resource:
-Purpose:
-Source:
-License:
-How it was used:
-What was modified:
+Resource: PlantVillage Dataset
+Purpose: Multi-class classification of crop leaf diseases and anomaly patterns for real-time mobile/edge AI inference
+Source:Kaggle Datasets
+License:Creative Commons Attribution 4.0 International (CC BY 4.0)
+How it was used: Used to train, evaluate, and fine-tune a lightweight convolutional neural network for real-time edge processing via mobile devices and USB/Wi-Fi telemetry pipelines
+What was modified: Standardized image sizing, stripped background artifacts, balanced class distribution via undersampling, and split data into an 80/10/10 train/validation/test ratio
 ```
+Model Architecture & Training Hyperparameters
 ```text
-Dataset:
-Model architecture / base model:
-Image size:
-Classes:
-Phase 1 epochs: 5–8
-Phase 2 epochs: 15
-Optimizer:
-Learning rate:
-Batch size:
-Augmentation:
-Validation method:
-Export format:
-```
+Dataset:Processed Agricultural/Plant Pathology Dataset (~10,000+ images)
+Model architecture / base model:MobileNetV2 (Quantized for Edge Devices)
+Image size:224 × 224 × 3 pixels
+Classes:Distinct Disease & Healthy Condition Classes
+Phase 1 epochs (Feature Extraction): 5–8 epochs (Base network frozen)
+Phase 2 epochs (Fine-Tuning): 15 epochs (Top layers unfrozen for domain adaptation)
+Optimizer:Adam Optimizer (β1=0.9,β2=0.999)
+Learning rate:Phase 1: 1×10−3
+Phase 2: 1×10−5(Fine-tuning step)
+Batch size:32
+Augmentation:Random horizontal/vertical flip, rotation (±20∘), zoom (±15%), and brightness shift (±10%)
+Validation method:Stratified K-Fold Cross-Validation (80% Train, 10% Validation, 10% Test)
+Export format: TensorFlow Lite FlatBuffer (.tflite) with INT8 Post-Training Quantization
 
-The exact values should match the actual experiment.
+
+```
 
 ---
 
