@@ -1,0 +1,331 @@
+# Robot Architecture
+
+## 1. System Overview
+
+The robot is designed as a small agricultural inspection rover. Its main purpose is to move between plants, identify the plot being inspected, collect sensor readings, and provide a camera view for plant health analysis.
+
+The robot itself handles movement, sensors, display, and communication. Image analysis is handled separately on an edge device (smartphone), allowing the system to perform plant analysis without requiring a constant internet connection.
+
+The overall system is divided into four main parts:
+
+* Rover control system
+* Sensor and actuator system
+* Edge AI system
+* User interface and data logging
+
+---
+
+## 2. Main Controller
+
+An ESP32-S3 development board is used as the main controller of the rover.
+
+The ESP32-S3 is responsible for:
+
+* Motor control
+* Servo control
+* Reading the MQ gas sensor
+* Reading the RFID reader
+* Updating the I2C LCD
+* Receiving commands from the edge device
+* Sending sensor and rover status to the edge device
+
+The ESP32 does not perform the main image classification. This keeps the microcontroller code relatively lightweight and allows the image-processing workload to run on a more capable edge device.
+
+---
+
+## 3. Drive System
+
+The rover uses  four DC gear motors and one Linefollowing array.
+
+A motor driver such as the L298N  is connected between the ESP32-S3 and the motors.
+
+The ESP32 controls:
+
+* Forward movement
+* Reverse movement
+* Left and right turns
+* Speed control
+* Stop
+
+For the prototype, basic movement is sufficient. The robot does not require a complicated autonomous navigation system because its main purpose is plant inspection rather than long-distance navigation.
+
+---
+
+## 4. Plant Inspection System
+
+A USB camera is mounted on the rover using a small servo mechanism.
+
+The servo allows the camera to be pointed toward a plant or leaf before an image is captured.
+
+The inspection process is:
+
+```text
+Rover reaches plant
+        ↓
+RFID identifies plot
+        ↓
+Camera points toward plant
+        ↓
+Image captured
+        ↓
+Image sent to edge device
+        ↓
+AI model analyzes image
+        ↓
+Result returned to rover/dashboard
+```
+
+The camera provides the main visual information used for plant health classification.
+
+---
+
+## 5. Environmental Sensor
+
+An MQ-series gas sensor is included as an additional source of information.
+
+The sensor provides a gas/VOC-related reading that can be stored together with the plant inspection result.
+
+The gas sensor is treated as supporting information rather than a standalone disease detector.
+there is also a Lora and Esp now Protocol system
+For example:
+
+```text
+Visual Analysis: Possible Disease
+AI Confidence: 91%
+
+VOC Reading: 327
+
+Overall Status:
+Needs Further Inspection
+```
+
+This allows the system to keep both visual and environmental information for each inspection.
+
+---
+
+## 6. RFID Plot Identification
+
+An RC522 RFID reader is used to identify different plots.
+
+Each plot can have its own RFID card or tag.
+
+For example:
+
+```text
+RFID → PLOT-A01
+RFID → PLOT-A02
+RFID → PLOT-B01
+```
+
+When the rover detects a tag, the plot ID is sent to the edge device and associated with the next inspection.
+
+This makes it possible to keep records based on location rather than only storing a sequence of images.
+
+---
+
+## 7. Edge AI Device
+
+A smartphone is used as the edge computing device.
+
+The phone receives images from the inspection system and runs the trained plant-health model locally.
+
+The model is trained using a dataset collected from a suitable agricultural dataset source and developed using a cloud development environment such as Google Colab.
+
+The development process is:
+
+```text
+Dataset
+   ↓
+Pre-processing
+   ↓
+Model Training
+   ↓
+Testing / Validation
+   ↓
+Model Optimization
+   ↓
+Deployable Model
+   ↓
+Smartphone
+```
+
+During normal operation, the phone can perform inference locally instead of sending every image to a cloud server.
+
+This reduces dependence on internet connectivity and makes the system more suitable for areas with limited or unreliable network access.
+
+---
+
+## 8. Communication
+
+The ESP32-S3 and smartphone exchange information during an inspection.
+
+The communication layer carries information such as:
+
+* Plot ID
+* Gas sensor readings
+* Rover status
+* Camera/inspection commands
+* AI classification result
+* AI confidence
+* Inspection status
+
+The exact communication method can be changed depending on the final prototype implementation. The system is designed so that the robot control code and AI application remain separate.
+
+---
+
+## 9. LCD Display
+
+An I2C LCD is connected to the ESP32-S3.
+
+The LCD provides basic information directly on the robot without requiring the user to look at the phone.
+
+Example:
+
+```text
+PLOT: B-02
+TOMATO
+
+STATUS: ATTENTION
+AI: 91%
+
+VOC: 327
+```
+
+The LCD is mainly intended for quick status information. More detailed results are shown on the smartphone dashboard.
+
+---
+
+## 10. Smartphone Dashboard
+
+The smartphone provides the main user interface.
+
+The dashboard can display:
+
+* Current plot
+* Plant type
+* Camera image
+* AI result
+* Confidence
+* Gas sensor reading
+* Inspection history
+* Rover connection status
+
+Example:
+
+```text
+--------------------------------
+       PLANT INSPECTION
+--------------------------------
+
+Plot: B-02
+Plant: Tomato
+
+[ Camera Image ]
+
+Possible Disease
+Confidence: 91.4%
+
+VOC Reading: 327
+Risk: Moderate
+
+Further inspection recommended
+
+--------------------------------
+```
+
+The dashboard is also intended to keep inspection records so that previous observations can be reviewed later.
+
+---
+
+## 11. Data Flow
+
+The complete data flow of the robot is:
+
+```text
+             ┌───────────────┐
+             │ USB Camera    │
+             └───────┬───────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │ Smartphone  │
+              │  Edge AI    │
+              └──────┬──────┘
+                     │
+          AI Result + Image
+                     │
+                     ▼
+┌─────────────┐  ┌─────────────┐
+│ RFID Reader ├─►│             │
+├─────────────┤  │   ESP32-S3  │
+│ MQ Sensor   ├─►│             │
+├─────────────┤  └──────┬──────┘
+│ LCD         │◄────────┤
+└─────────────┘
+│                    Lora/ESpnow transmission protocol advancement option
+                        ▼
+                 ┌─────────────┐
+                 │ Motor Driver│
+                 └──────┬──────┘
+                        ▼
+                    DC Motors
+```
+
+---
+
+## 12. Operating Sequence
+
+A normal inspection cycle works as follows:
+
+1. The rover starts and connects to the edge device.
+2. The rover moves toward the inspection area.
+3. An RFID tag identifies the current plot.
+4. The camera is positioned toward the plant.
+5. An image is captured.
+6. The image is processed by the AI model on the smartphone.
+7. The ESP32 provides the associated sensor readings.
+8. The AI result and sensor information are combined into an inspection record.
+9. The result is shown on the smartphone dashboard.
+10. A short status summary is shown on the LCD.
+11. The rover can continue to the next plot.
+
+---
+
+## 13. Architecture Goal
+
+The main design goal is to keep the system modular.
+
+The rover can operate as the physical sensing platform, while the smartphone provides the computing and user-interface layer. This means the AI model can be improved or replaced without having to redesign the motor and sensor control system.
+
+The same approach also makes it possible to use the software on different capable edge devices in the future.
+
+```text
+              AGRICULTURAL INSPECTION SYSTEM
+
+       ┌──────────────┐
+       │ Cloud / PC    │
+       │ Model Training│
+       └───────┬──────┘
+               │
+          Trained Model
+               │
+               ▼
+       ┌──────────────┐
+       │ Edge Device  │
+       │ AI + UI      │
+       └───────┬──────┘
+               │
+          Communication
+               │
+               ▼
+       ┌──────────────┐
+       │ ESP32-S3     │
+       │ Robot Control│
+       └───────┬──────┘
+               │
+       ┌───────┼────────┐
+       ▼       ▼        ▼
+    Motors   Sensors    LCD
+```
+
+The architecture separates **model development, edge inference, robot control, and user interaction** so that each part can be developed and tested independently.
