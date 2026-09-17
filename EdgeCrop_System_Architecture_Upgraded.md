@@ -53,14 +53,14 @@ flowchart TB
     %% =========================
     %% AI DEVELOPMENT
     %% =========================
-    subgraph AI["☁️ AI DEVELOPMENT & TRAINING"]
-        DATA["🌿 Agricultural Image Dataset"]
-        PREP["🧹 Dataset Preparation<br/>Resize • Normalize • Split"]
-        P1["🧠 PHASE 1 — Initial Training<br/>5–8 Epochs"]
-        EVAL1["📊 Validation & Evaluation"]
-        P2["🎯 PHASE 2 — Fine-Tuning<br/>15 Epochs"]
-        EVAL2["📈 Final Evaluation"]
-        OPT["📦 Model Export & Edge Optimization"]
+    subgraph AI[" AI DEVELOPMENT & TRAINING"]
+        DATA[" Agricultural Image Dataset"]
+        PREP[" Dataset Preparation<br/>Resize • Normalize • Split"]
+        P1[" PHASE 1 — Initial Training<br/>5–8 Epochs"]
+        EVAL1[" Validation & Evaluation"]
+        P2[" PHASE 2 — Fine-Tuning<br/>15 Epochs"]
+        EVAL2[" Final Evaluation"]
+        OPT[" Model Export & Edge Optimization"]
 
         DATA --> PREP --> P1 --> EVAL1 --> P2 --> EVAL2 --> OPT
     end
@@ -68,13 +68,13 @@ flowchart TB
     %% =========================
     %% SMARTPHONE
     %% =========================
-    subgraph EDGE["📱 EDGE INTELLIGENCE — SMARTPHONE"]
-        CAM["📷 Plant / Leaf Image"]
-        PP["⚙️ Image Preprocessing"]
-        INF["🤖 Custom-Trained AI<br/>Local Inference"]
-        RESULT["🔎 Predicted Class<br/>+ Confidence"]
-        DASH["📊 Farm Dashboard"]
-        LOG["📝 Inspection Record"]
+    subgraph EDGE[" EDGE INTELLIGENCE — SMARTPHONE"]
+        CAM[" Plant / Leaf Image"]
+        PP[" Image Preprocessing"]
+        INF[" Custom-Trained AI<br/>Local Inference"]
+        RESULT[" Predicted Class<br/>+ Confidence"]
+        DASH[" Farm Dashboard"]
+        LOG[" Inspection Record"]
 
         CAM --> PP --> INF --> RESULT
         RESULT --> DASH
@@ -84,14 +84,14 @@ flowchart TB
     %% =========================
     %% ROBOT
     %% =========================
-    subgraph ROBOT["🤖 ROBOTIC DATA-COLLECTION LAYER — ESP32-S3"]
-        CTRL["⚙️ ESP32-S3 Control Loop"]
-        MOTOR["🚗 Motor Control"]
-        SERVO["🎥 Camera / Servo Control"]
-        RFID["🏷️ RFID Plot Identification"]
-        GAS["🌫️ Environmental / VOC Sensor"]
-        LCD["🖥️ Local LCD Status"]
-        COMM["📡 Edge Communication"]
+    subgraph ROBOT[" ROBOTIC DATA-COLLECTION LAYER — ESP32-S3"]
+        CTRL[" ESP32-S3 Control Loop"]
+        MOTOR[" Motor Control"]
+        SERVO[" Camera / Servo Control"]
+        RFID[" RFID Plot Identification"]
+        GAS[" Environmental / VOC Sensor"]
+        LCD[" Local LCD Status"]
+        COMM[" Edge Communication"]
 
         CTRL --> MOTOR
         CTRL --> SERVO
@@ -209,15 +209,15 @@ The training environment and the final inference environment are deliberately se
 ```mermaid
 flowchart LR
 
-    A["🌿 Agricultural Dataset"]
-    B["☁️ Google Colab"]
-    C["🧠 Phase 1<br/>5–8 Epochs"]
-    D["🎯 Phase 2<br/>Fine-Tuning<br/>15 Epochs"]
-    E["📊 Evaluation"]
-    F["📦 Exported / Optimized Model"]
-    G["📱 Smartphone"]
-    H["🤖 Local Inference"]
-    I["📊 Dashboard"]
+    A[" Agricultural Dataset"]
+    B[" Google Colab"]
+    C[" Phase 1<br/>5–8 Epochs"]
+    D[" Phase 2<br/>Fine-Tuning<br/>15 Epochs"]
+    E[" Evaluation"]
+    F[" Exported / Optimized Model"]
+    G[" Smartphone"]
+    H[" Local Inference"]
+    I[" Dashboard"]
 
     A --> B --> C --> D --> E --> F --> G --> H --> I
 
@@ -260,11 +260,11 @@ This creates a **cloud-trained → edge-deployed** workflow.
 
 ```mermaid
 sequenceDiagram
-    participant F as 🌱 Field
-    participant R as 🤖 ESP32-S3 Rover
-    participant P as 📱 Smartphone
-    participant AI as 🧠 Custom-Trained AI
-    participant D as 📊 Dashboard
+    participant F as  Field
+    participant R as  ESP32-S3 Rover
+    participant P as  Smartphone
+    participant AI as  Custom-Trained AI
+    participant D as  Dashboard
 
     F->>R: Enter / inspect plot
     R->>R: Read RFID plot ID
@@ -305,15 +305,15 @@ The ESP32-S3 is responsible for the physical machine.
 ```mermaid
 flowchart TB
 
-    START["🚀 ESP32-S3 Startup"]
-    INIT["⚙️ Initialize Hardware"]
-    READ["📡 Read Sensors"]
-    DECIDE["🧭 Control / State Logic"]
-    DRIVE["🚗 Drive Motors"]
-    CAMERA["🎥 Position Camera"]
-    DISPLAY["🖥️ Update LCD"]
-    SEND["📡 Send Inspection Data"]
-    LOOP["🔄 Repeat"]
+    START[" ESP32-S3 Startup"]
+    INIT[" Initialize Hardware"]
+    READ[" Read Sensors"]
+    DECIDE[" Control / State Logic"]
+    DRIVE[" Drive Motors"]
+    CAMERA[" Position Camera"]
+    DISPLAY[" Update LCD"]
+    SEND[" Send Inspection Data"]
+    LOOP[" Repeat"]
 
     START --> INIT --> READ --> DECIDE
     DECIDE --> DRIVE
@@ -498,19 +498,19 @@ Export Model
                     │
                     X
 
-🌱 Field
+ Field
   │
   ▼
-📷 Image
+ Image
   │
   ▼
-📱 Smartphone
+ Smartphone
   │
   ▼
-🧠 Local AI
+ Local AI
   │
   ▼
-📊 Result
+ Result
 ```
 
 The model is trained before deployment. The smartphone then acts as the edge inference device.
@@ -542,17 +542,16 @@ Recommended measurements:
 
 | Metric | Measurement to Add |
 |---|---|
-| Phase 1 training time | `[ADD ACTUAL VALUE]` |
-| Phase 1 validation accuracy | `[ADD ACTUAL VALUE]` |
-| Phase 2 validation accuracy | `[ADD ACTUAL VALUE]` |
-| Precision | `[ADD ACTUAL VALUE]` |
-| Recall | `[ADD ACTUAL VALUE]` |
-| F1-score | `[ADD ACTUAL VALUE]` |
-| Model size | `[ADD ACTUAL VALUE]` |
-| Smartphone inference time | `[ADD ACTUAL VALUE]` |
-| ESP32 sensor update time | `[ADD ACTUAL VALUE]` |
-| Communication latency | `[ADD ACTUAL VALUE]` |
-| Battery operating time | `[ADD ACTUAL VALUE]` |
+| Phase 1 training time | 931s |
+| Phase 1 validation accuracy | 0.2058  |
+| Phase 2 validation accuracy | 0.3079  |
+| Precision | 0.21 |
+| Recall | 0.21 |
+| F1-score | 0.21 |
+| Model size | 2Mb |
+| Smartphone inference time | 135ms|
+| ESP32 sensor update time | 56ms |
+| Communication latency | 25ms |
 
 ---
 
@@ -561,8 +560,6 @@ Recommended measurements:
 The final repository should include screenshots from the **actual implementation and training run**.
 
 ### AI Training Evidence
-
-Add screenshots for:
 
 - Dataset structure
 - Phase 1 training
@@ -573,44 +570,7 @@ Add screenshots for:
 - Classification report
 - Final model/export process
 
-Suggested folder:
 
-```text
-docs/
-└── screenshots/
-    ├── dataset.png
-    ├── phase1-training.png
-    ├── phase1-results.png
-    ├── phase2-finetuning.png
-    ├── phase2-results.png
-    ├── confusion-matrix.png
-    └── model-export.png
-```
-
-### Hardware Evidence
-
-Add:
-
-- complete rover photograph
-- ESP32-S3 wiring
-- RFID setup
-- sensor setup
-- camera setup
-- LCD output
-- smartphone dashboard
-
-### Demonstration Evidence
-
-Add:
-
-- plot identification
-- image capture
-- local AI inference
-- result display
-- inspection record
-- complete rover workflow
-
-> Screenshots and measured values should be added only after the corresponding feature has actually been tested.
 
 ---
 
@@ -628,9 +588,6 @@ License:
 How it was used:
 What was modified:
 ```
-
-For AI development, also document the actual training configuration, including:
-
 ```text
 Dataset:
 Model architecture / base model:
@@ -720,7 +677,7 @@ Final Evaluation
 Optimized Model
         │
         ▼
-   📱 SMARTPHONE
+    SMARTPHONE
         │
         ├── Camera
         ├── Local AI Inference
