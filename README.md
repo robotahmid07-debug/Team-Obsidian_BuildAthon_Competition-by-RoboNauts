@@ -2,13 +2,13 @@
 
 ### Team Obsidian · BuildAthon 2026 (RoboNauts) · Track C: Agritech
 
-> **Train centrally. Deploy locally. Collect physically. Keep the robot controller independent from the AI inference pipeline.**
+> **Trained centrally. Deployed locally. Collect physically. Keep the robot controller independent from the AI inference pipeline.**
 
 ---
 
-## 📁 Repository File Map — *Which File Is For What*
+##  Repository File Map — *Which File Is For What*
 
-**Start here.** This table tells you exactly what each file/folder does.
+**Start here.** This table tells us exactly what each file/folder does.
 
 | Path | File / Folder | What It Is | Why It Matters |
 |---|---|---|---|
@@ -35,7 +35,7 @@
 
 ## 1. Features, Uniqueness, Novelty & Innovation
 
-### 1.1 ✨ Core Features
+### 1.1  Core Features
 
 | # | Feature | Description |
 |---|---|---|
@@ -46,11 +46,11 @@
 | 5 | **RFID Plot Identification** | Every observation is tagged with a physical plot ID (e.g., A-03) — no manual bookkeeping |
 | 6 | **Environmental/VOC Sensing** | Adds contextual field data (VOC levels) alongside visual inspection |
 | 7 | **Local LCD Fallback** | Basic machine status stays visible even if the dashboard is unreachable |
-| 8 | **Transmission-Based Multi-Rover Scalability** ⭐ | Robot-to-robot transmission layer designed from day one for future multi-rover fleets (see §2) |
+| 8 | **Transmission-Based Multi-Rover Scalability**  | Robot-to-robot transmission layer designed from day one for future multi-rover fleets (see §2) |
 | 9 | **Robustness by Separation** | AI, edge inference, and robot control are decoupled — one failure does not cascade |
 | 10 | **Measured, Not Estimated** | All performance numbers (training time, accuracy, inference latency, model size) reported from actual runs |
 
-### 1.2 🎯 What Makes EdgeCrop Unique
+### 1.2  What Makes EdgeCrop Unique
 
 - **Cloud-trained → edge-deployed workflow** — Training happens centrally (Google Colab); inference happens locally (smartphone). Most hobby projects do one or the other.
 - **Plot-aware inspection** — RFID linking means observations are *geographically contextualized*, not just image classifications floating in a database.
@@ -58,7 +58,7 @@
 - **Failure-aware design** — The architecture explicitly handles AI failure, sensor failure, communication failure, and dashboard failure.
 - **Scalability-first robotics** — The transmission layer is not an afterthought; it is a first-class design element.
 
-### 1.3 💡 Novelty & Innovation
+### 1.3  Novelty & Innovation
 
 1. **Smartphone as a reusable edge AI node** — Instead of building dedicated inference hardware, EdgeCrop turns an everyday smartphone into a field AI compute device.
 2. **Staged fine-tuning for agricultural domain adaptation** — Phase 1 establishes a stable baseline; Phase 2 refines the representation. Documented as an explicit experimental procedure.
@@ -67,7 +67,7 @@
 
 ---
 
-## 2. Scalability: Transmission-Based Multi-Rover Architecture ⭐
+## 2. Scalability: Transmission-Based Multi-Rover Architecture 
 
 This is a **core design decision**, not a future plan. The current rover already includes a transmission layer so that scaling to a multi-rover fleet does not require re-architecting the system.
 
@@ -217,7 +217,7 @@ flowchart TB
         CTRL --> TX
     end
 
-    FIELD["🌱 FIELD / CROP"]
+    FIELD[" FIELD / CROP"]
     OPT --> INF
     COMM --> DASH
     TX --> DASH
@@ -594,7 +594,7 @@ What was modified: Standardized image sizing, stripped background artifacts,
 | Original code, designs, assets | ✅ Developed by team; third-party documented |
 | Public/shared GitHub repository | ✅ `robotahmid07-debug/Team-Obsidian_BuildAthon_Competition-by-RoboNauts` |
 | Active commit history | ✅ Maintained throughout hacking window |
-| AI usage documentation | ✅ §11.2 |
+| AI usage documentation | ✅ 11.2 |
 | Physical demonstration | ✅ Hardware prototype available (extra points) |
 
 ### Section 03: Track C — Agritech
@@ -614,7 +614,7 @@ What was modified: Standardized image sizing, stripped background artifacts,
 | Missing repo/commit logs | ✅ Active commit history |
 | Plagiarized code | ✅ Core logic independently developed |
 | Concurrent multi-track | ✅ Track C only |
-| Undocumented AI usage | ✅ §11.2 |
+| Undocumented AI usage | ✅ 11.2 |
 
 ---
 
@@ -622,13 +622,13 @@ What was modified: Standardized image sizing, stripped background artifacts,
 
 1. **Read this README** — you're here
 2. **See the file map** — top of this document
-3. **Read features/novelty** — §1
-4. **Understand scalability** — §2 (transmission-based multi-rover)
-5. **Deep dive into architecture** — §5–§8
-6. **Check measured results** — §6.3
+3. **Read features/novelty** — 1
+4. **Understand scalability** — 2 (transmission-based multi-rover)
+5. **Deep dive into architecture** — 5–8
+6. **Check measured results** — 6.3
 7. **Review firmware** — `/codes/Aurdino Lowlevel hardware code.cpp`
-8. **Verify training evidence** — §12.2
-9. **Watch the 3-min demo** — §12.1
+8. **Verify training evidence** — 12.2
+9. **Watch the 3-min demo** — 12.1
 
 ---
 
