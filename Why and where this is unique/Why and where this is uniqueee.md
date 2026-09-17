@@ -1,4 +1,4 @@
-# 🎯 Where EdgeCrop Is Unique
+#  Where Our Solution Is Unique
 
 Most student agritech projects stop at *"we trained a model and it classifies leaves."* EdgeCrop is different in **seven concrete, defensible ways** — each one maps directly to the BuildAthon rubric.
 
@@ -115,7 +115,7 @@ The ESP32-S3 **does not** run computer vision. The smartphone **does not** drive
 
 ---
 
-## 📌 Summary — The Uniqueness Stack
+##  Summary — The Uniqueness Stack
 
 | # | Unique Element | Rubric Criterion It Serves |
 |---|---|---|
@@ -129,7 +129,7 @@ The ESP32-S3 **does not** run computer vision. The smartphone **does not** drive
 
 ---
 
-## 🎤 One-Sentence Pitch
+##  One Line answer
 
 > **EdgeCrop is unique because it is not a leaf classifier — it is a plot-aware, fleet-scalable, failure-tolerant edge AI inspection system that trains in the cloud, runs on a reused smartphone, identifies plots by RFID, and keeps the robot controller completely independent from the AI pipeline.**
 
