@@ -5,7 +5,7 @@
 > **Trained centrally. Deployed locally. Collect physically. Keep the robot controller independent from the AI inference pipeline.**
 
 ---
-
+   
 ##  Repository File Map — *Which File Is For What*
 
 **Start here.** This table tells us exactly what each file/folder does.
