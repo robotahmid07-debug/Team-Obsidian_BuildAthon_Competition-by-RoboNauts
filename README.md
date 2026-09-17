@@ -16,10 +16,6 @@
 | `/System Architecture & System Robustness/` | `EdgeCrop_System_Architecture_Upgraded (5).md` | Full architecture specification, robustness strategy, state machine, failure modes | Deep technical reference |
 | `/Trained Edge model/` | Model artifacts (`.tflite`, etc.) | Exported/optimized model ready for smartphone deployment | Deployment artifact |
 | `/codes/` | `Aurdino Lowlevel hardware code.cpp` | ESP32-S3 firmware: motor control, servo positioning, RFID reading, sensor polling, LCD updates, transmission, communication | Hardware control logic |
-| `/LICENSE` | License file | Open-source license terms | Legal compliance |
-| *(Recommended)* `/ai/` | `dataset/`, `preprocessing/`, `phase1_training/`, `phase2_finetuning/`, `evaluation/`, `export/` | AI development pipeline | Training data & notebooks |
-| *(Recommended)* `/mobile/` | `inference/`, `dashboard/`, `inspection_records/`, `communication/` | Smartphone app: local inference, dashboard, record storage | Edge intelligence layer |
-| *(Recommended)* `/docs/` | `architecture/`, `screenshots/`, `ai-training/`, `hardware/` | Evidence, diagrams, training screenshots | Evidence repository |
 
 **Firmware responsibility split (ESP32-S3):**
 
